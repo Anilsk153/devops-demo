@@ -26,7 +26,7 @@ jobs:
         with:
           host: 192.168.1.81
           username: anilsk
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
             docker stop web || true
