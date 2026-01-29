@@ -18,3 +18,15 @@ jobs:
       - name: Push Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
 
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
+            docker stop web || true
+            docker rm web || true
+            docker run -d -p 80:80 --name web \
+              ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
